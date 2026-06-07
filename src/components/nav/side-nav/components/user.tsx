@@ -1,7 +1,11 @@
 import { ChevronDown } from "lucide-react";
 import Image from "next/image";
 
-export default function User() {
+interface UserProps {
+  user: { name: string; email: string; role: string } | null;
+}
+
+export default function User({ user }: UserProps) {
   return (
     <div className="flex h-16 items-center border-b border-border px-2">
       <div className="flex w-full items-center justify-between rounded-md px-2 py-1 hover:bg-slate-200 dark:hover:bg-slate-800">
@@ -14,11 +18,20 @@ export default function User() {
             height={36}
           />
           <div className="flex flex-col">
-            <span className="text-sm font-medium">Name</span>
-            <span className="text-xs text-muted-foreground">Agent Admin</span>
+            {user ? (
+              <>
+                <span className="text-sm font-medium">{user.name}</span>
+                <span className="text-xs capitalize text-muted-foreground">{user.role}</span>
+              </>
+            ) : (
+              <>
+                <span className="text-sm font-medium">Guest</span>
+                <span className="text-xs text-muted-foreground">Not logged in</span>
+              </>
+            )}
           </div>
         </div>
-        <ChevronDown size={16} />
+        {user && <ChevronDown size={16} />}
       </div>
     </div>
   );

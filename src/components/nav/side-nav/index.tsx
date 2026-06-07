@@ -1,14 +1,42 @@
 "use client";
 
-import { ArrowLeftToLine, ArrowRightToLine } from "lucide-react";
-import { useState } from "react";
+import { ArrowLeftToLine, ArrowRightToLine, LogOut } from "lucide-react";
+import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import Navigation from "./components/navigation";
 import User from "./components/user";
 import VisActor from "./components/visactor";
 
 export default function SideNav() {
+  const pathname = usePathname();
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
+
+  // Hooks MUST be called before early return
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token || pathname === "/login") return;
+
+    fetch("/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setUser(d.data.user);
+      })
+      .catch(() => {});
+  }, [pathname]);
+
+  async function handleLogout() {
+    await fetch("/api/auth/logout", { method: "POST" });
+    localStorage.removeItem("token");
+    router.push("/login");
+  }
+
+  // Hide sidebar on login page (after hooks)
+  if (pathname === "/login") return null;
 
   return (
     <>
@@ -20,11 +48,7 @@ export default function SideNav() {
         )}
         onClick={() => setIsOpen(!isOpen)}
       >
-        {isOpen ? (
-          <ArrowLeftToLine size={16} />
-        ) : (
-          <ArrowRightToLine size={16} />
-        )}
+        {isOpen ? <ArrowLeftToLine size={16} /> : <ArrowRightToLine size={16} />}
       </button>
       <aside
         className={cn(
@@ -33,8 +57,19 @@ export default function SideNav() {
           isOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
-        <User />
+        <User user={user} />
         <Navigation />
+        {user && (
+          <div className="mt-auto border-t border-border p-3">
+            <button
+              onClick={handleLogout}
+              className="flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-xs text-slate-500 hover:bg-slate-200 dark:text-slate-400 dark:hover:bg-slate-800"
+            >
+              <LogOut size={14} />
+              Logout
+            </button>
+          </div>
+        )}
         <VisActor />
       </aside>
     </>

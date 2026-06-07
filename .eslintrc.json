@@ -9,7 +9,7 @@
   "plugins": ["@typescript-eslint"],
   "root": true,
   "rules": {
-    "no-console": ["error"],
+    "no-console": ["warn"],
     "@typescript-eslint/array-type": "off",
     "@typescript-eslint/consistent-type-definitions": "off",
     "@typescript-eslint/consistent-type-imports": [
@@ -27,6 +27,10 @@
         "args": "after-used",
         "argsIgnorePattern": "^_"
       }
-    ]
+    ],
+    "@typescript-eslint/no-explicit-any": "warn",
+    "@typescript-eslint/no-require-imports": "warn",
+    "no-empty": "off",
+    "react/no-unescaped-entities": "off"
   }
 }

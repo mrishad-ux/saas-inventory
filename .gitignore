@@ -31,6 +31,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# project tracking
+status.json
+task_log.md
+MIGRATION_SPEC.md
+PROJECT_STATE.md
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
