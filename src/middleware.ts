@@ -59,9 +59,19 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Root "/" redirects to login (cannot be accessed publicly)
+  // Root "/dashboard" — allow if authenticated (admin only sees dashboard)
+  // Unauthenticated users hitting "/" are caught by the auth check below
   if (pathname === "/") {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const token = request.cookies.get("token")?.value;
+    if (!token) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    const { valid } = await verifyTokenEdge(token);
+    if (!valid) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+    // Valid admin/manager/accounts — let them through (dashboard page)
+    return NextResponse.next();
   }
 
   // Check auth
