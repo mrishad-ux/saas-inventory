@@ -58,7 +58,7 @@ export default function SideNav() {
         )}
       >
         <User user={user} />
-        <Navigation />
+        <Navigation userRole={user?.role} />
         {user && (
           <div className="mt-auto border-t border-border p-3">
             <button

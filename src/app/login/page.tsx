@@ -35,8 +35,8 @@ export default function LoginPage() {
       // Redirect based on role
       const role = data.data.user.role;
       if (role === "admin") router.push("/");
-      else if (role === "manager") router.push("/");
-      else if (role === "accounts") router.push("/");
+      else if (role === "manager") router.push("/inventory-daily");
+      else if (role === "accounts") router.push("/sales");
       else router.push("/");
     } catch {
       setError("Network error. Please try again.");

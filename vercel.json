@@ -1,0 +1,9 @@
+{
+  "buildCommand": "pnpm build",
+  "outputDirectory": ".next",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "env": {
+    "JWT_SECRET": "hermes-saas-inventory-jwt-secret-2026"
+  }
+}
