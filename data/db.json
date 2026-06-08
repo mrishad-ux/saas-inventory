@@ -22,7 +22,7 @@
       "id": 3,
       "name": "Accounts",
       "email": "accounts@rishart.com",
-      "password": "$2b$10$lzPSIPc86Rr73wMd.T13Gef3lf55eEvRTuig0kucAvlLW8AXIu6ne",
+      "password": "$2b$10$EeBdNbF.weNsvR5BuxHPoexxTmzQySS2NVEHInc8taZm6lf3dQJ0u",
       "role": "accounts",
       "created_at": "2026-06-07T17:45:50.668Z",
       "updated_at": "2026-06-07T17:45:50.668Z"
