@@ -1,8 +1,14 @@
+import { getAuthUser } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { initDb, dbQuery, dbCreate, dbUpdate } from "@/lib/db";
 
 export async function GET() {
   try {
+    const { user } = await getAuthUser();
+    if (!user || !["admin", "manager"].includes(user.role)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     initDb();
     const items = dbQuery("inventory_items");
     return NextResponse.json({ success: true, data: items });
@@ -16,6 +22,11 @@ export async function GET() {
 
 export async function POST(request: NextRequest) {
   try {
+    const { user } = await getAuthUser();
+    if (!user || !["admin", "manager"].includes(user.role)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     initDb();
     const body = await request.json();
     const {

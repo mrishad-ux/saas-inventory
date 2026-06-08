@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, FormEvent, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
@@ -9,6 +9,21 @@ export default function LoginPage() {
   const [password, setPassword] = useState("admin123");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // If already logged in, redirect to role home
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      if (payload.role === "admin") router.push("/");
+      else if (payload.role === "manager") router.push("/inventory-daily");
+      else if (payload.role === "accounts") router.push("/sales");
+      else router.push("/");
+    } catch {
+      localStorage.removeItem("token");
+    }
+  }, [router]);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();

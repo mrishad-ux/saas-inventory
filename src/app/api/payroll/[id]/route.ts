@@ -9,7 +9,7 @@ export async function GET(
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user || (user.role !== "admin" && user.role !== "accounts")) {
+    if (!user || !["admin", "manager"].includes(user.role)) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
@@ -38,7 +38,7 @@ export async function PUT(
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user || (user.role !== "admin" && user.role !== "accounts")) {
+    if (!user || !["admin", "manager"].includes(user.role)) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
@@ -77,7 +77,7 @@ export async function DELETE(
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user || (user.role !== "admin" && user.role !== "accounts")) {
+    if (!user || !["admin", "manager"].includes(user.role)) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 

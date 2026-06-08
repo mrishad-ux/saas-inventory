@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user || (user.role !== "admin" && user.role !== "accounts")) {
+    if (!user || !["admin", "manager"].includes(user.role)) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user || (user.role !== "admin" && user.role !== "accounts")) {
+    if (!user || !["admin", "manager"].includes(user.role)) {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 

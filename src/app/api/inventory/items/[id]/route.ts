@@ -1,3 +1,4 @@
+import { getAuthUser } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { initDb, dbUpdate, dbDelete, dbGet } from "@/lib/db";
 
@@ -6,6 +7,11 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { user } = await getAuthUser();
+    if (!user || !["admin", "manager"].includes(user.role)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     initDb();
     const { id } = await params;
     const itemId = parseInt(id, 10);
@@ -25,6 +31,11 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { user } = await getAuthUser();
+    if (!user || !["admin", "manager"].includes(user.role)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     initDb();
     const { id } = await params;
     const itemId = parseInt(id, 10);
@@ -71,6 +82,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { user } = await getAuthUser();
+    if (!user || !["admin", "manager"].includes(user.role)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     initDb();
     const { id } = await params;
     const itemId = parseInt(id, 10);

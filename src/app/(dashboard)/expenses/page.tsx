@@ -385,8 +385,8 @@ export default function ExpensesPage() {
       const expData = await expRes.json();
       const catData = await catRes.json();
       const supData = await supRes.json();
-      if (expData.success) setExpenses(expData.data.expenses);
-      if (catData.success) setCategories(catData.data.categories);
+      if (expData.success) setExpenses(Array.isArray(expData.data) ? expData.data : (expData.data.expenses || []));
+      if (catData.success) setCategories(Array.isArray(catData.data) ? catData.data : (catData.data.categories || []));
       if (supData.success)
         setSuppliers(
           supData.data.suppliers?.map((s: any) => ({

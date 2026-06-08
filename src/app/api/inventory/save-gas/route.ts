@@ -1,8 +1,14 @@
+import { getAuthUser } from "@/lib/auth";
 import { NextRequest, NextResponse } from "next/server";
 import { initDb, dbUpsert } from "@/lib/db";
 
 export async function POST(request: NextRequest) {
   try {
+    const { user } = await getAuthUser();
+    if (!user || !["admin", "manager"].includes(user.role)) {
+      return NextResponse.json({ error: "Access denied" }, { status: 403 });
+    }
+
     initDb();
     const body = await request.json();
     const { log_date, gas_changed } = body;

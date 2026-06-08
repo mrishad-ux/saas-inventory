@@ -25,16 +25,16 @@ function canAccess(pathname: string, role: string): boolean {
   if (role === "manager") {
     if (pathname === "/" || pathname === "/login") return true;
     if (pathname.startsWith("/inventory") || pathname === "/expenses" || pathname === "/payroll") return true;
-    // deny all others
-    return ["/sales", "/payments", "/staff", "/suppliers", "/settlements", "/backup"].some(p => pathname.startsWith(p));
+    // deny: sales, payments, staff, suppliers, settlements, backup
+    return ![ "/sales", "/payments", "/staff", "/suppliers", "/settlements", "/backup" ].some(p => pathname.startsWith(p));
   }
 
   // accounts: sales, settlements, payments only
   if (role === "accounts") {
     if (pathname === "/" || pathname === "/login") return true;
     if (pathname.startsWith("/sales") || pathname.startsWith("/settlements") || pathname.startsWith("/payments")) return true;
-    // deny all others
-    return ["/inventory", "/expenses", "/payroll", "/staff", "/suppliers", "/backup"].some(p => pathname.startsWith(p));
+    // deny: inventory, expenses, payroll, staff, suppliers, backup
+    return ![ "/inventory", "/expenses", "/payroll", "/staff", "/suppliers", "/backup" ].some(p => pathname.startsWith(p));
   }
 
   return false;

@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user) {
+    if (!user || user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
   try {
     await initDb();
     const { user } = await getAuthUser();
-    if (!user) {
+    if (!user || user.role !== "admin") {
       return NextResponse.json({ success: false, error: "Forbidden" }, { status: 403 });
     }
 
